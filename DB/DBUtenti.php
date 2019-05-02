@@ -13,7 +13,7 @@ class DBUtenti
     //Variabili di class
     private $connection;
     private $tabelleDB = [ //Array di tabelle del db
-        "annuncio",
+        "Richiedente",
         "cdl",
         "docente",
         "documento",
