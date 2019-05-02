@@ -779,15 +779,15 @@ $app->post('/visualizzaprofilostudente', function (Request $request, Response $r
     $db = new DBDatore();
 
     $requestData = $request->getParsedBody();//Dati richiesti dal servizio REST
-    $matricola = $requestData['matricola'];
+    $id = $requestData['id'];
 
 //Controllo la risposta dal DB e compilo i campi della risposta
-    $responseData = $db->visualizzaProfiloStudente($matricola);
+    $responseData = $db->visualizzaProfiloRichiedente($id);
     if ($responseData != null) {
         $responseData['error'] = false; //Campo errore = false
         $responseData['message'] = 'Elemento visualizzato con successo'; //Messaggio di esiso positivo
 
-        $response->getBody()->write(json_encode(array("Studente" => $responseData)));
+        $response->getBody()->write(json_encode(array("Richiedente" => $responseData)));
         //Definisco il Content-type come json, i dati sono strutturati e lo dichiaro al browser
         $newResponse = $response->withHeader('Content-type', 'application/json');
         return $newResponse; //Invio la risposta del servizio REST al client

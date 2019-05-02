@@ -62,7 +62,7 @@ class DBDatore
     //Funzione visualizza profilo studente ()
     public function VisualizzaProfiloRichiedente($id)
     {
-        $tabella = $this->tabelleDB[6]; //Tabella per la query
+        $tabella = $this->tabelleDB[4]; //Tabella per la query
         $campi = $this->campiTabelleDB[$tabella];
         //query: "SELECT nome, cognome, email FROM richiedente WHERE id = ?"
         $query = (
@@ -97,9 +97,9 @@ class DBDatore
     }
 
     //Funzione rimuovi annuncio (Domenico e Jonathan)
-    public function rimuoviAnnuncio($idAnnuncio)
+    public function rimuoviLavoro($idLavoro)
     {
-        $tabella = $this->tabelleDB[0]; //Tabella per la query
+        $tabella = $this->tabelleDB[3]; //Tabella per la query
         $campi = $this->campiTabelleDB[$tabella];
         //query:  " DELETE FROM ANNUNCIO WHERE ID = $idAnnuncio"
         $query = (
@@ -109,7 +109,7 @@ class DBDatore
         );
 
         $stmt = $this->connection->prepare($query);
-        $stmt->bind_param("i", $idAnnuncio);
+        $stmt->bind_param("i", $idLavoro);
         $result = $stmt->execute();
         $stmt->store_result();
         return $result;
