@@ -5,11 +5,11 @@ class DBDatore
     //Variabili di classe
     private $connection;
     private $tabelleDB = [ //Array di tabelle del db
-        "categoria",
-        "curriculum",
-        "datore",
-        "lavoro",
-        "richiedente"
+        "categoria",//0
+        "curriculum",//1
+        "datore",//2
+        "lavoro",//3
+        "richiedente"//4
     ];
     private $campiTabelleDB = [ //Campi delle tabelle (array bidimensionale indicizzato con key)
         "categoria" => [
@@ -60,11 +60,11 @@ class DBDatore
     }
 
     //Funzione visualizza profilo studente ()
-    public function VisualizzaProfiloStudente($matricola)
+    public function VisualizzaProfiloRichiedente($id)
     {
         $tabella = $this->tabelleDB[6]; //Tabella per la query
         $campi = $this->campiTabelleDB[$tabella];
-        //query: "SELECT nome, cognome, email FROM studente WHERE matricola = ?"
+        //query: "SELECT nome, cognome, email FROM richiedente WHERE id = ?"
         $query = (
             "SELECT " .
             $campi[1] . ", " .
@@ -76,7 +76,7 @@ class DBDatore
             $campi[0] . " = ? "
         );
         $stmt = $this->connection->prepare($query);
-        $stmt->bind_param("s", $matricola);
+        $stmt->bind_param("s", $id);
         $stmt->execute();
         $stmt->store_result();
         if ($stmt->num_rows > 0) {

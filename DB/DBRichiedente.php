@@ -11,11 +11,11 @@ class DBRichiedente
     //Variabili di classe
     private $connection;
     private $tabelleDB = [ //Array di tabelle del db
-        "categoria",
-        "curriculum",
-        "datore",
-        "lavoro",
-        "richiedente"
+        "categoria",//0
+        "curriculum",//1
+        "datore",//2
+        "lavoro",//3
+        "richiedente"//4
     ];
     private $campiTabelleDB = [ //Campi delle tabelle (array bidimensionale indicizzato con key)
         "categoria" => [
