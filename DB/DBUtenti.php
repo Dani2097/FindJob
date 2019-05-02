@@ -31,7 +31,7 @@ class DBUtenti
             "edizione",
             "casa_editrice",
             "cod_stud",
-            "autore",
+            "Curriculum",
             "cod_materia"
         ],
         "cdl" => [
