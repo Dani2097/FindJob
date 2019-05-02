@@ -13,83 +13,51 @@ class DBUtenti
     //Variabili di class
     private $connection;
     private $tabelleDB = [ //Array di tabelle del db
-        "Richiedente",
-        "cdl",
-        "docente",
-        "documento",
-        "libro",
-        "materia",
-        "studente",
-        "valutazione"
+        "categoria",
+        "curriculum",
+        "datore",
+        "lavoro",
+        "richiedente"
     ];
     private $campiTabelleDB = [ //Campi delle tabelle (array bidimensionale indicizzato con key)
-        "annuncio" => [
-            "id",
-            "titolo",
-            "contatto",
-            "prezzo",
-            "edizione",
-            "casa_editrice",
-            "cod_stud",
-            "Curriculum",
-            "cod_materia"
-        ],
-        "cdl" => [
+        "categoria" => [
             "id",
             "nome"
+
         ],
-        "docente" => [
-            "matricola",
-            "nome",
-            "cognome",
-            "email",
-            "password",
-            "attivo"
-        ],
-        "documento" => [
+        "curriculum" => [
             "id",
-            "titolo",
-            "cod_docente",
-            "cod_studente",
-            "cod_materia",
+            "richiedente",
             "link"
         ],
-        "libro" => [
+        "datore" => [
             "id",
-            "titolo",
-            "autore",
-            "casa_editrice",
-            "edizione",
-            "cod_docente",
-            "cod_materia",
-            "link"
-        ],
-        "materia" => [
-            "id",
-            "nome",
-            "cod_docente",
-            "cod_cdl"
-        ],
-        "studente" => [
-            "matricola",
             "nome",
             "cognome",
             "email",
             "password",
             "attivo",
-            "cod_cds"
+            "contatto"
         ],
-        "valutazione" => [
+        "lavoro" => [
             "id",
-            "valutazione",
-            "cod_documento",
-            "cod_studente"
+            "categoria",
+            "nome",
+            "datore",
+            "descrizione",
+            "link"
         ],
-        "cdl_doc" =>[
-            "id_cdl",
-            "cod_doc"
+        "richiedente" => [
+            "id",
+            "nome",
+            "cognome",
+            "email",
+            "password",
+            "attivo"
+
         ]
     ];
+
 
     //Costruttore
     public function __construct()
