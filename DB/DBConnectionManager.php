@@ -6,9 +6,9 @@ class DBConnectionManager
     //ALTERVISTA UFFICIALE
     private $connection;
     private $host = "localhost";
-    private $username = "unimolshare";
+    private $username = "root";
     private $passwd = "";
-    private $dbname = "my_unimolshare";
+    private $dbname = "findjobdb";
 
 
     /*SITEGROUND PER IL TESTING
