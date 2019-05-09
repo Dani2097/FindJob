@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/UnimolShare.iml" filepath="$PROJECT_DIR$/.idea/UnimolShare.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/FindJob.iml" filepath="$PROJECT_DIR$/.idea/FindJob.iml" />
     </modules>
   </component>
 </project>

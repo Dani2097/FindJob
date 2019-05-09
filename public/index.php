@@ -221,451 +221,6 @@ $app->post('/recupero', function (Request $request, Response $response) {
 });
 
 //endpoint /visualizzamateriapercdl (danilo)ok
-$app->post('/visualizzamateriapercdl', function (Request $request, Response $response) {
-
-    $db = new DBRichiedente();
-
-    $requestData = $request->getParsedBody();//Dati richiesti dal servizio REST
-    $cod_cdl = $requestData['cod_cdl'];
-
-    //Controllo la risposta dal DB e compilo i campi della risposta
-    $responseData = $db->visualizzaMateriaPerCdl($cod_cdl);
-    $contatore = (count($responseData));
-    if ($responseData != null) {
-        $responseData['error'] = false; //Campo errore = false
-        $responseData['message'] = 'Elemento visualizzato con successo'; //Messaggio di esiso positivo
-        $responseData['contatore'] = $contatore;
-        $response->getBody()->write(json_encode(array("nomi_materie" => $responseData)));
-        //Definisco il Content-type come json, i dati sono strutturati e lo dichiaro al browser
-        $newResponse = $response->withHeader('Content-type', 'application/json');
-        return $newResponse; //Invio la risposta del servizio REST al client
-    } else {
-        $responseData['error'] = true; //Campo errore = false
-        $responseData['message'] = 'Errore imprevisto';
-        return $response->withJson($responseData);
-    }
-    //Invio la risposta del servizio REST al client
-});
-
-//endpoint /visualizzamateriapercdl (danilo)ok
-$app->post('/visualizzamateriapermatricola', function (Request $request, Response $response) {
-
-    $db = new DBRichiedente();
-
-    $requestData = $request->getParsedBody();//Dati richiesti dal servizio REST
-    $matricola = $requestData['matricola'];
-
-    //Controllo la risposta dal DB e compilo i campi della risposta
-    $responseData = $db->visualizzaMateriaPerMatricola($matricola);
-    $contatore = (count($responseData));
-    if ($responseData != null) {
-        $responseData['error'] = false; //Campo errore = false
-        $responseData['message'] = 'Elemento visualizzato con successo'; //Messaggio di esiso positivo
-        $responseData['contatore'] = $contatore;
-        $response->getBody()->write(json_encode(array("nomi_materie" => $responseData)));
-        //Definisco il Content-type come json, i dati sono strutturati e lo dichiaro al browser
-        $newResponse = $response->withHeader('Content-type', 'application/json');
-        return $newResponse; //Invio la risposta del servizio REST al client
-    } else {
-        $responseData['error'] = true; //Campo errore = false
-        $responseData['message'] = 'Errore imprevisto';
-        return $response->withJson($responseData);
-    }
-    //Invio la risposta del servizio REST al client
-});
-
-//endpoint /visualizzamateriapercdl (danilo)ok
-$app->post('/visualizzamateriedisponibili', function (Request $request, Response $response) {
-
-    $db = new DBRichiedente();
-
-    $requestData = $request->getParsedBody();//Dati richiesti dal servizio REST
-    $cod_docente = $requestData['matricola'];
-
-    //Controllo la risposta dal DB e compilo i campi della risposta
-    $responseData = $db->visualizzaMaterieDisponibili($cod_docente);
-    $contatore = (count($responseData));
-    if ($responseData != null) {
-        $responseData['error'] = false; //Campo errore = false
-        $responseData['message'] = 'Elemento visualizzato con successo'; //Messaggio di esiso positivo
-        $responseData['contatore'] = $contatore;
-        $response->getBody()->write(json_encode(array("nomi_materie" => $responseData)));
-        //Definisco il Content-type come json, i dati sono strutturati e lo dichiaro al browser
-        $newResponse = $response->withHeader('Content-type', 'application/json');
-        return $newResponse; //Invio la risposta del servizio REST al client
-    } else {
-        $responseData['error'] = true; //Campo errore = false
-        $responseData['message'] = 'Errore imprevisto';
-        return $response->withJson($responseData);
-    }
-    //Invio la risposta del servizio REST al client
-});
-
-$app->post('/assegnadocentemateria', function (Request $request, Response $response) {
-    $db = new DBRichiedente();
-
-    $requestData = $request->getParsedBody();//Dati richiesti dal servizio REST
-    $docente = $requestData['cod_docente'];
-    $materia = $requestData['cod_materia'];
-
-    //Risposta del servizio REST
-    $responseData = array(); //La risposta e' un array di informazioni da compilare
-
-    //Controllo la risposta dal DB e compilo i campi della risposta
-    if ($db->assegnaDocenteAmateria($docente, $materia)) {
-        $responseData['error'] = false; //Campo errore = false
-        $responseData['message'] = 'Materia assegnata'; //Messaggio di esiso positivo
-    } else { //Se c'è stato un errore imprevisto
-        $responseData['error'] = true; //Campo errore = true
-        $responseData['message'] = "Impossibile assegnare la materia"; //Messaggio di esito negativo
-    }
-    return $response->withJson($responseData); //Invio la risposta del servizio REST al client
-});
-
-//endpoint /visualizzadocumentopermateria (Danilo)ok
-$app->post('/visualizzadocumentopermateria', function (Request $request, Response $response) {
-
-    $db = new DBDatore();
-
-    $requestData = $request->getParsedBody();//Dati richiesti dal servizio REST
-    $materia = $requestData['materia'];
-
-//Controllo la risposta dal DB e compilo i campi della risposta
-    $responseData = $db->visualizzaDocumentoPerMateria($materia);
-    $contatore = (count($responseData));
-    if ($responseData != null) {
-        $responseData['contatore'] = $contatore;
-        $responseData['error'] = false; //Campo errore = false
-        $responseData['message'] = 'Elemento visualizzato con successo'; //Messaggio di esiso positivo
-        $response->getBody()->write(json_encode(array("documenti" => $responseData)));
-        //Definisco il Content-type come json, i dati sono strutturati e lo dichiaro al browser
-        $newResponse = $response->withHeader('Content-type', 'application/json');
-        return $newResponse; //Invio la risposta del servizio REST al client
-    } else {
-        $responseData['error'] = true; //Campo errore = false
-        $responseData['message'] = 'Non ci sono documenti per la materia selezionata';
-        return $response->withJson($responseData);
-    }
-
-});
-
-$app->post('/visualizzadocumentoperid', function (Request $request, Response $response) {
-
-    $db = new DBUtenti();
-
-    $requestData = $request->getParsedBody();//Dati richiesti dal servizio REST
-    $matricola = $requestData['matricola'];
-
-//Controllo la risposta dal DB e compilo i campi della risposta
-    $responseData = $db->visualizzaDocumentoPerId($matricola);
-    $contatore = (count($responseData));
-
-    if ($responseData != null) {
-        $responseData['error'] = false; //Campo errore = false
-        $responseData['message'] = 'Elemento visualizzato con successo';//Messaggio di esiso positivo
-
-        $responseData['contatore'] = $contatore;
-        $response->getBody()->write(json_encode(array("documenti" => $responseData)));
-        //Definisco il Content-type come json, i dati sono strutturati e lo dichiaro al browser
-        $newResponse = $response->withHeader('Content-type', 'application/json');
-        return $newResponse; //Invio la risposta del servizio REST al client
-    } else {
-        $responseData['error'] = true; //Campo errore = false
-        $responseData['message'] = 'Errore imprevisto';
-        return $response->withJson($responseData);
-    }
-
-});
-
-$app->post('/visualizzacdlperiddocente', function (Request $request, Response $response) {
-
-    $db = new DBRichiedente();
-
-    $requestData = $request->getParsedBody();
-    $iddoc = $requestData['iddoc'];
-//Controllo la risposta dal DB e compilo i campi della risposta
-    $responseData = $db->visualizzaCdlPerCodDoc($iddoc);
-    $contatore = (count($responseData));
-    if ($responseData != null) {
-        $responseData['error'] = false; //Campo errore = false
-        $responseData['contatore'] = $contatore;
-        $responseData['message'] = 'Elemento visualizzato con successo'; //Messaggio di esiso positivo
-        $response->getBody()->write(json_encode(array("CDL" => $responseData)));
-        //metto in un json e lo inserisco nella risposta del servizio REST
-        //Definisco il Content-type come json, i dati sono strutturati e lo dichiaro al browser
-        $newResponse = $response->withHeader('Content-type', 'application/json');
-        return $newResponse; //Invio la risposta del servizio REST al client
-    } else {
-        $responseData['error'] = true; //Campo errore = false
-        $responseData['message'] = 'Errore imprevisto';
-        return $response->withJson($responseData);
-    }
-
-});
-
-
-$app->post('/checkmateriaperiddocente', function (Request $request, Response $response) {
-
-    $db = new DBRichiedente();
-
-    $requestData = $request->getParsedBody();
-    $id_materia = $requestData['id'];
-    $matricola = $requestData['codice_docente'];
-//Controllo la risposta dal DB e compilo i campi della risposta
-    $responseData = $db->checkMateriaPerCodDoc($id_materia, $matricola);
-    if ($responseData != null) {
-        $responseData['error'] = false; //Campo errore = false
-        $responseData['message'] = 'Elemento visualizzato con successo'; //Messaggio di esiso positivo
-        $response->getBody()->write(json_encode(array("Check" => $responseData)));
-        //metto in un json e lo inserisco nella risposta del servizio REST
-        //Definisco il Content-type come json, i dati sono strutturati e lo dichiaro al browser
-        $newResponse = $response->withHeader('Content-type', 'application/json');
-        return $newResponse; //Invio la risposta del servizio REST al client
-    } else {
-        $responseData['error'] = true; //Campo errore = false
-        $responseData['message'] = 'Errore imprevisto';
-        return $response->withJson($responseData);
-    }
-
-});
-
-$app->post('/checkcdlperiddocente', function (Request $request, Response $response) {
-
-    $db = new DBRichiedente();
-
-    $requestData = $request->getParsedBody();
-    $cdl = $requestData['id'];
-    $matricola = $requestData['matricola'];
-//Controllo la risposta dal DB e compilo i campi della risposta
-    $responseData = $db->checkCdlPerCodDoc($cdl, $matricola);
-    if ($responseData != null) {
-        $responseData['error'] = false; //Campo errore = false
-        $responseData['message'] = 'Elemento visualizzato con successo'; //Messaggio di esiso positivo
-        $response->getBody()->write(json_encode(array("Check" => $responseData)));
-        //metto in un json e lo inserisco nella risposta del servizio REST
-        //Definisco il Content-type come json, i dati sono strutturati e lo dichiaro al browser
-        $newResponse = $response->withHeader('Content-type', 'application/json');
-        return $newResponse; //Invio la risposta del servizio REST al client
-    } else {
-        $responseData['error'] = true; //Campo errore = false
-        $responseData['message'] = 'Errore imprevisto';
-        return $response->withJson($responseData);
-    }
-
-});
-
-
-$app->post('/visualizzanomecdlperid', function (Request $request, Response $response) {
-
-    $db = new DBRichiedente();
-
-    $requestData = $request->getParsedBody();
-    $id = $requestData['id'];
-//Controllo la risposta dal DB e compilo i campi della risposta
-    $responseData = $db->visualizzaNomeCdl($id);
-    $contatore = (count($responseData));
-    if ($responseData != null) {
-        $responseData['error'] = false; //Campo errore = false
-        $responseData['contatore'] = $contatore;
-        $responseData['message'] = 'Elemento visualizzato con successo'; //Messaggio di esiso positivo
-        $response->getBody()->write(json_encode(array("CDL" => $responseData)));
-        //metto in un json e lo inserisco nella risposta del servizio REST
-        //Definisco il Content-type come json, i dati sono strutturati e lo dichiaro al browser
-        $newResponse = $response->withHeader('Content-type', 'application/json');
-        return $newResponse; //Invio la risposta del servizio REST al client
-    } else {
-        $responseData['error'] = true; //Campo errore = false
-        $responseData['message'] = 'Errore imprevisto';
-        return $response->withJson($responseData);
-    }
-
-});
-
-$app->post('/visualizzacdlperidstudente', function (Request $request, Response $response) {
-
-    $db = new DBDatore();
-
-    $requestData = $request->getParsedBody();
-    $matricola = $requestData['matricola'];
-//Controllo la risposta dal DB e compilo i campi della risposta
-    $responseData = $db->visualizzaCdlStudente($matricola);
-
-    $contatore = (count($responseData));
-    if ($responseData != null) {
-        $responseData['error'] = false; //Campo errore = false
-        $responseData['contatore'] = $contatore;
-        $responseData['message'] = 'Elemento visualizzato con successo'; //Messaggio di esiso positivo
-        $response->getBody()->write(json_encode(array("CDL" => $responseData)));
-        //metto in un json e lo inserisco nella risposta del servizio REST
-        //Definisco il Content-type come json, i dati sono strutturati e lo dichiaro al browser
-        $newResponse = $response->withHeader('Content-type', 'application/json');
-        return $newResponse; //Invio la risposta del servizio REST al client
-    } else {
-        $responseData['error'] = true; //Campo errore = false
-        $responseData['message'] = 'Errore imprevisto';
-        return $response->withJson($responseData);
-    }
-
-});
-
-//endpoint /VisualizzaCDL (Danilo)
-$app->post('/visualizzacdlperid', function (Request $request, Response $response) {
-
-    $db = new DBUtenti();
-
-    $requestData = $request->getParsedBody();
-    $idcdl = $requestData['idcdl'];
-//Controllo la risposta dal DB e compilo i campi della risposta
-    $responseData = $db->visualizzaCdlPerid($idcdl);
-    $contatore = (count($responseData));
-    if ($responseData != null) {
-        $responseData['error'] = false; //Campo errore = false
-        $responseData['contatore'] = $contatore;
-        $responseData['message'] = 'Elemento visualizzato con successo'; //Messaggio di esiso positivo
-        $response->getBody()->write(json_encode(array("CDL" => $responseData)));
-        //metto in un json e lo inserisco nella risposta del servizio REST
-        //Definisco il Content-type come json, i dati sono strutturati e lo dichiaro al browser
-        $newResponse = $response->withHeader('Content-type', 'application/json');
-        return $newResponse; //Invio la risposta del servizio REST al client
-    } else {
-        $responseData['error'] = true; //Campo errore = false
-        $responseData['message'] = 'Errore imprevisto';
-        return $response->withJson($responseData);
-    }
-
-});
-
-$app->post('/visualizzacdl', function (Request $request, Response $response) {
-
-    $db = new DBUtenti();
-
-    $requestData = $request->getParsedBody();
-//Controllo la risposta dal DB e compilo i campi della risposta
-    $responseData = $db->visualizzaCdl();
-    $contatore = (count($responseData));
-    if ($responseData != null) {
-        $responseData['error'] = false; //Campo errore = false
-        $responseData['contatore'] = $contatore;
-        $responseData['message'] = 'Elemento visualizzato con successo'; //Messaggio di esiso positivo
-        $response->getBody()->write(json_encode(array("CDL" => $responseData)));
-        //metto in un json e lo inserisco nella risposta del servizio REST
-        //Definisco il Content-type come json, i dati sono strutturati e lo dichiaro al browser
-        $newResponse = $response->withHeader('Content-type', 'application/json');
-        return $newResponse; //Invio la risposta del servizio REST al client
-    } else {
-        $responseData['error'] = true; //Campo errore = false
-        $responseData['message'] = 'Errore imprevisto';
-        return $response->withJson($responseData);
-    }
-
-});
-
-
-//endpoint /visualizzaannunciopermateria (danilo)ok
-$app->post('/visualizzaannunciopermateria', function (Request $request, Response $response) {
-
-    $db = new DBDatore();
-
-    $requestData = $request->getParsedBody();//Dati richiesti dal servizio REST
-    $materia = $requestData['materia'];
-
-//Controllo la risposta dal DB e compilo i campi della risposta
-    $responseData = $db->visualizzaAnnuncioPerMateria($materia);
-    $contatore = (count($responseData));
-    if ($responseData != null) {
-        $responseData['error'] = false; //Campo errore = false
-        $responseData['message'] = 'Elemento visualizzato con successo'; //Messaggio di esiso positivo
-        $responseData['contatore'] = $contatore;
-        $response->getBody()->write(json_encode(array("libri" => $responseData)));
-        //Definisco il Content-type come json, i dati sono strutturati e lo dichiaro al browser
-        $newResponse = $response->withHeader('Content-type', 'application/json');
-        return $newResponse; //Invio la risposta del servizio REST al client
-    } else {
-        $responseData['error'] = true; //Campo errore = false
-        $responseData['message'] = 'Errore imprevisto';
-        return $response->withJson($responseData);
-    }
-
-});
-
-$app->post('/visualizzaannuncioperid', function (Request $request, Response $response) {
-
-    $db = new DBDatore();
-
-    $requestData = $request->getParsedBody();//Dati richiesti dal servizio REST
-    $matricola = $requestData['matricola'];
-
-//Controllo la risposta dal DB e compilo i campi della risposta
-    $responseData = $db->visualizzaAnnuncioPerId($matricola);
-    $contatore = (count($responseData));
-    if ($responseData != null) {
-        $responseData['error'] = false; //Campo errore = false
-        $responseData['message'] = 'Elemento visualizzato con successo'; //Messaggio di esiso positivo
-        $responseData['contatore'] = $contatore;
-        $response->getBody()->write(json_encode(array("annunci" => $responseData)));
-        //Definisco il Content-type come json, i dati sono strutturati e lo dichiaro al browser
-        $newResponse = $response->withHeader('Content-type', 'application/json');
-        return $newResponse; //Invio la risposta del servizio REST al client
-    } else {
-        $responseData['error'] = true; //Campo errore = false
-        $responseData['message'] = 'Errore imprevisto';
-        return $response->withJson($responseData);
-    }
-
-});
-
-$app->post('/visualizzalibropermateria', function (Request $request, Response $response) {
-
-    $db = new DBDatore();
-
-    $requestData = $request->getParsedBody();//Dati richiesti dal servizio REST
-    $materia = $requestData['materia'];
-
-//Controllo la risposta dal DB e compilo i campi della risposta
-    $responseData = $db->visualizzaLibroPerMateria($materia);
-    $contatore = (count($responseData));
-    if ($responseData != null) {
-        $responseData['error'] = false; //Campo errore = false
-        $responseData['message'] = 'Elemento visualizzato con successo'; //Messaggio di esiso positivo
-        $responseData['contatore'] = $contatore;
-        $response->getBody()->write(json_encode(array("libri" => $responseData)));
-        //Definisco il Content-type come json, i dati sono strutturati e lo dichiaro al browser
-        $newResponse = $response->withHeader('Content-type', 'application/json');
-        return $newResponse; //Invio la risposta del servizio REST al client
-    } else {
-        $responseData['error'] = true; //Campo errore = false
-        $responseData['message'] = 'Errore imprevisto';
-        return $response->withJson($responseData);
-    }
-
-});
-
-$app->post('/visualizzalibropercognomedocente', function (Request $request, Response $response) {
-
-    $db = new DBDatore();
-
-    $requestData = $request->getParsedBody();//Dati richiesti dal servizio REST
-    $cognome = $requestData['cognome'];
-
-//Controllo la risposta dal DB e compilo i campi della risposta
-    $responseData = $db->visualizzaLibroPerCognomeDocente($cognome);
-    $contatore = (count($responseData));
-    if ($responseData != null) {
-        $responseData['error'] = false; //Campo errore = false
-        $responseData['message'] = 'Elemento visualizzato con successo'; //Messaggio di esiso positivo
-        $responseData['contatore'] = $contatore;
-        $response->getBody()->write(json_encode(array("libri" => $responseData)));
-        //Definisco il Content-type come json, i dati sono strutturati e lo dichiaro al browser
-        $newResponse = $response->withHeader('Content-type', 'application/json');
-        return $newResponse; //Invio la risposta del servizio REST al client
-    } else {
-        $responseData['error'] = true; //Campo errore = false
-        $responseData['message'] = 'Errore imprevisto';
-        return $response->withJson($responseData);
-    }
-
-});
-
 
 // Run app = ho riempito $app e avvio il servizio REST
 
@@ -903,23 +458,20 @@ $app->post('/caricaannuncio', function (Request $request, Response $response) {
     return $response->withJson($responseData); //Invio la risposta del servizio REST al client
 });
 
-$app->post('/caricalibro', function (Request $request, Response $response) {
-    $db = new DBRichiedente();
+$app->post('/caricalavoro', function (Request $request, Response $response) {
+    $db = new DBDatore();
 
     $requestData = $request->getParsedBody();//Dati richiesti dal servizio REST
-    $titolo = $requestData['titolo'];
-    $edizione = $requestData['edizione'];
-    $casa_editrice = $requestData['casa_editrice'];
-    $cod_docente = $requestData['cod_docente'];
-    $autori = $requestData['autore'];
-    $cod_materia = $requestData['cod_materia'];
+    $nome = $requestData['nome'];
+    $categoria = $requestData['categoria'];
+    $descrizione = $requestData['descrizione'];
     $link = $requestData['link'];
-
+    $iddatore = $requestData['iddatore'];
     //Risposta del servizio REST
     $responseData = array(); //La risposta e' un array di informazioni da compilare
 //$query=$db->caricaAnnuncio($titolo, $contatto, $prezzo, $edizione, $casa_editrice, $cod_studente, $autori, $cod_materia, $link);
     //Controllo la risposta dal DB e compilo i campi della risposta
-    if ($db->caricaLibro($titolo, $edizione, $casa_editrice, $cod_docente, $autori, $cod_materia, $link)) { //Se il caricamento del doc Ã¨ andata a buon fine
+    if ($db->caricaLavoro($categoria,$nome,$descrizione, $link,$iddatore)) { //Se il caricamento del doc Ã¨ andata a buon fine
 
         $responseData['error'] = false; //Campo errore = false
         $responseData['message'] = 'Caricamento avvenuto con successo '; //Messaggio di esito positivo
@@ -1148,7 +700,31 @@ $app->post('/visualizzanomelibropermatricola', function (Request $request, Respo
     }
     //Invio la risposta del servizio REST al client
 });
+//nuovi
+$app->post('/modificalavoro', function (Request $request, Response $response) {
+    $db = new DBDatore();
 
+    $requestData = $request->getParsedBody();//Dati richiesti dal servizio REST
+    $id = $requestData['id'];
+    $nome = $requestData['nome'];
+    $categoria = $requestData['categoria'];
+    $descrizione = $requestData['descrizione'];
+    $link = $requestData['link'];
+
+    //Risposta del servizio REST
+    $responseData = array(); //La risposta e' un array di informazioni da compilare
+
+    //Controllo la risposta dal DB e compilo i campi della risposta
+    if ($db->modificaLavoroPerId($id, $nome, $categoria, $descrizione, $link)) {
+        $responseData['error'] = false; //Campo errore = false
+        $responseData['message'] = 'Update effettuato'; //Messaggio di esiso positivo
+
+    } else { //Se c'è stato un errore imprevisto
+        $responseData['error'] = true; //Campo errore = true
+        $responseData['message'] = "Impossibile effettuare l'update"; //Messaggio di esito negativo
+    }
+    return $response->withJson($responseData); //Invio la risposta del servizio REST al client
+});
 $app->run();
 
 ?>

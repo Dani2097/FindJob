@@ -70,12 +70,12 @@ class DBUtenti
     //---- METODI PER GESTIRE LE QUERY ----
 
     //Funzione di accesso (Andrea)
-    public function login($email, $password)
+    public function login($email, $password,$tab)
     {
         $password = hash('sha256', $password);
-        $studenteTab = $this->tabelleDB[6];
-        $docenteTab = $this->tabelleDB[2];
-        $campi = $this->campiTabelleDB[$studenteTab];
+        $table = $this->tabelleDB[$tab];
+
+        $campi = $this->campiTabelleDB[$table];
         $attivo = 1;
         /*  query: "SELECT matricola, nome, cognome, email, 'studente' as tabella FROM studente WHERE email = ? AND password = ? AND attivo = 1
                     UNION
