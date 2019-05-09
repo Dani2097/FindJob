@@ -137,61 +137,39 @@ class DBUtenti
     }
 
     //danilo per visualizzare il corso di studio
-    public function visualizzaCdlPerid($idcdl)
+    public function visualizzaProfiloPerId($id,$tablenumber)
     {
 
-        $table = $this->tabelleDB[1]; //Tabella per la query
+        $table = $this->tabelleDB[$tablenumber]; //Tabella per la query
         $campi = $this->campiTabelleDB[$table];
         $query = //query: "SELECT id, nome FROM cdl"
-            "SELECT * " .
+            "SELECT " .
+            $campi[1].",".
+            $campi[2].",".
+            $campi[3]." ".
             "FROM " .
             $table." ".
             "WHERE ". $campi[0]." = ?";
         $stmt = $this->connection->prepare($query);
-        $stmt->bind_param(i , $idcdl);
+        $stmt->bind_param(i , $id);
         $stmt->execute();
         $stmt->store_result();
         if ($stmt->num_rows > 0) {
-            $stmt->bind_result($id,$nome);
+            $stmt->bind_result($nome,$cognome,$email);
 
             $CDL = array();
             while ($stmt->fetch()) { //Scansiono la risposta della query
                 $temp = array(); //Array temporaneo per l'acquisizione dei dati
                 //Indicizzo con key i dati nell'array
                 $temp[$campi[1]] = $nome;
-                array_push($CDL, $temp); //Inserisco l'array $temp all'ultimo posto dell'array $cdl
+                $temp[$campi[2]] = $cognome;
+                $temp[$campi[3]] = $email;
+                array_push($utente, $temp); //Inserisco l'array $temp all'ultimo posto dell'array $cdl
             }
-            return $CDL;
+            return $utente;
         }else return null;
     }
 
-
-   public function visualizzaCdl()
-    {
-
-        $table = $this->tabelleDB[1]; //Tabella per la query
-        $campi = $this->campiTabelleDB[$table];
-        $query = //query: "SELECT id, nome FROM cdl"
-            ("SELECT * " .
-            "FROM " .
-            $table." ");
-        $stmt = $this->connection->prepare($query);
-        $stmt->execute();
-        $stmt->store_result();
-        if ($stmt->num_rows > 0) {
-            $stmt->bind_result($id,$nome);
-
-            $CDL = array();
-            while ($stmt->fetch()) { //Scansiono la risposta della query
-                $temp = array(); //Array temporaneo per l'acquisizione dei dati
-                //Indicizzo con key i dati nell'array
-                $temp[$campi[0]] = $id;
-                $temp[$campi[1]] = $nome;
-                array_push($CDL, $temp); //Inserisco l'array $temp all'ultimo posto dell'array $cdl
-            }
-            return $CDL;
-        }else return null;
-    }
 
     //Funzione di recupero (Danilo)
     public function recupero($email)
@@ -231,11 +209,8 @@ class DBUtenti
     public function confermaProfilo($email, $matricola)
     {
         $stringHelper = new StringHelper();
-        $substr = $stringHelper->subString($email);
-        $tabella = $this->tabelleDB[6];
-        if ($substr == "unimol") {
-            $tabella = $this->tabelleDB[2];
-        }
+        $tabella = $this->tabelleDB[2];
+
         $campi = $this->campiTabelleDB[$tabella];
         //query:  "UPDATE docente/studente SET attivo = true WHERE matricola = ?"
         $query = (
@@ -483,63 +458,7 @@ class DBUtenti
             return null;
         }
     }
-    public function visualizzaNomeMateriaPerID($idmateria)
-    {
 
-        $table = $this->tabelleDB[5]; //Tabella per la query
-        $campi = $this->campiTabelleDB[$table];
-        $query = //query: "SELECT id, nome FROM cdl"
-            "SELECT " .
-            $campi[1]." ".
-            "FROM " .
-            $table." ".
-            "WHERE ". $campi[0]." = ?";
-        $stmt = $this->connection->prepare($query);
-        $stmt->bind_param("i" , $idmateria);
-        $stmt->execute();
-        $stmt->store_result();
-        if ($stmt->num_rows > 0) {
-            $stmt->bind_result($nome);
-
-            $materie = array();
-            while ($stmt->fetch()) { //Scansiono la risposta della query
-                $temp = array(); //Array temporaneo per l'acquisizione dei dati
-                //Indicizzo con key i dati nell'array
-                $temp[$campi[1]] = $nome;
-                array_push($materie, $temp); //Inserisco l'array $temp all'ultimo posto dell'array $cdl
-            }
-            return $materie;
-        }else return null;
-    }
-    public function visualizzaIDMateriaPerNome($materia)
-    {
-        $tabella = $this->tabelleDB[5]; //Tabella per la query
-        $campi = $this->campiTabelleDB[$tabella];
-        $query = //query: "SELECT id FROM materia WHERE nome = ? "
-            "SELECT " .
-            $campi[0] . " " .
-            "FROM " .
-            $tabella . " " .
-            "WHERE " .
-            $campi[1] . ' = ? ';
-        $stmt = $this->connection->prepare($query);
-        $stmt->bind_param("s", $materia);
-        $stmt->execute();
-        $stmt->store_result();
-        if ($stmt->num_rows > 0) {
-            $stmt->bind_result($id_materia);
-            $id = array();
-            while ($stmt->fetch()) { //Scansiono la risposta della query
-                $temp = array();
-                //Indicizzo con key i dati nell'array
-                $temp[$campi[0]] = $id_materia;
-                array_push($id, $temp); //Inserisco l'array $temp all'ultimo posto dell'array $materie
-            }
-            return $id; //ritorno array $materie riempito con i risultati della query effettuata.
-        } else {
-            return null;
-        }
-    }
 
 }
 
