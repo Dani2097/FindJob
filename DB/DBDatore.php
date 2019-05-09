@@ -251,14 +251,14 @@ class DBDatore
     //Funzione visualizza documento per id (Danilo)
 
     //Funzione per scaricare un documento (Andrea)
-    public function downloadDocumento($id)
+    public function downloadCurriculum($id)
     {
-        $tabella = $this->tabelleDB[3]; //Tabella per la query
+        $tabella = $this->tabelleDB[1]; //Tabella per la query
         $campi = $this->campiTabelleDB[$tabella];
-        /*  query: "SELECT link FROM documento WHERE id = ?" */
+        /*  query: "SELECT link FROM CURRICULUM WHERE id = ?" */
         $query = (
             "SELECT " .
-            $campi[5] . " " .
+            $campi[2] . " " .
             "FROM " .
             $tabella . " " .
             "WHERE " .

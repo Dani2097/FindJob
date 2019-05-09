@@ -86,7 +86,7 @@ class DBUtenti
             $campi[1] . ", " .
             $campi[2] . ", " .
             $campi[3] . ", " .
-            "'" . $studenteTab . "' as tabella " .
+            "'" . $table . "' as tabella " .
             "FROM " .
             $studenteTab . " " .
             "WHERE " .
@@ -280,54 +280,32 @@ class DBUtenti
     }
 
     // Funzione registrazione (Francesco)
-    public function registrazione($matricola, $nome, $cognome, $email, $password, $cds)
+    public function registrazione( $nome, $cognome, $email, $password, $contatto,$table)
     {
         $password = hash('sha256', $password);
-        $stringHelper = new StringHelper();
-        $substr = $stringHelper->subString($email);
-        $tabella = $this->tabelleDB[6];
+
+        $tabella = $this->tabelleDB[$table];
         $campi = $this->campiTabelleDB[$tabella];
         $attivo = 0;
 
-        if ($substr == "studenti") {
-            //query: "INSERT INTO TABLE (matricola, nome, cognome, email, password, attivo, cod_cds) VALUES (?,?,?,?,?,0,?)"
+            //query: "INSERT INTO TABLE(datore:2,richiedente:4) ( nome, cognome, email, password, attivo, contatto) VALUES (?,?,?,?,?,0,?)"
             $query = (
                 "INSERT INTO " .
                 $tabella . " (" .
-                $campi[0] . ", " .
+
                 $campi[1] . ", " .
                 $campi[2] . ", " .
                 $campi[3] . ", " .
                 $campi[4] . ", " .
                 $campi[5] . ", " .
-                $campi[6] . ") " .
-
-                "VALUES (?,?,?,?,?,?,?)"
-            );
-            $stmt = $this->connection->prepare($query);
-            $stmt->bind_param("sssssii", $matricola, $nome, $cognome, $email, $password, $attivo, $cds); //ss se sono 2 stringhe, ssi 2 string e un int (sostituisce ? della query)
-            $result = ($stmt->execute()) ? 1 : 2;
-        } else if ($substr == "unimol"){
-            $tabella = $this->tabelleDB[2];
-            //query: "INSERT INTO TABLE (matricola, nome, cognome, email, password, attivo) VALUES (?,?,?,?,?,0)"
-            $query = (
-                "INSERT INTO " .
-                $tabella . " (" .
-                $campi[0] . ", " .
-                $campi[1] . ", " .
-                $campi[2] . ", " .
-                $campi[3] . ", " .
-                $campi[4] . ", " .
-                $campi[5] . ") " .
+                $campi[6] .") " .
 
                 "VALUES (?,?,?,?,?,?)"
             );
             $stmt = $this->connection->prepare($query);
-            $stmt->bind_param("sssssi", $matricola, $nome, $cognome, $email, $password, $attivo); //ss se sono 2 stringhe, ssi 2 string e un int (sostituisce ? della query)
-            $result = ($stmt->execute()) ? 1 : 2;
-        } else {
-            $result = 0;
-        }
+            $stmt->bind_param("ssssis",  $nome, $cognome, $email, $password, $attivo, $contatto); //ss se sono 2 stringhe, ssi 2 string e un int (sostituisce ? della query)
+            $result = ($stmt->execute()) ;
+
         return $result;
     }
 
@@ -375,27 +353,7 @@ class DBUtenti
     }
 
     //Funzione carica documento (Jonathan)
-    public function caricaDocumento($titolo, $cod_docente, $cod_studente, $cod_materia, $link)
-    {
-        $tabella = $this->tabelleDB[3]; //Tabella per la query
-        $campi = $this->campiTabelleDB[$tabella];
-        //query: "INSERT INTO documento (id, titolo, cod_docente, cod_studente, cod_materia,link) VALUES (?,?,?,?,?)"
-        $query = (
-            "INSERT INTO  " .
-            $tabella . " ( " .
 
-            $campi[1] . ", " .
-            $campi[2] . ", " .
-            $campi[3] . ", " .
-            $campi[4] . ", " .
-            $campi[5] . " ) " .
-
-            "VALUES (?,?,?,?,?)"
-        );
-        $stmt = $this->connection->prepare($query);
-        $stmt->bind_param("sssis", $titolo, $cod_docente, $cod_studente, $cod_materia, $link);
-        return $stmt->execute();
-    }
 
 
     //Funzione rimuovi documento (Domenico e Jonathan)
