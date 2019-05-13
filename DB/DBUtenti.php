@@ -72,10 +72,11 @@ class DBUtenti
     //Funzione di accesso (Andrea)
     public function login($email, $password,$tab)
     {
-        $password = hash('sha256', $password);
-        $table = $this->tabelleDB[$tab];
+       $password = hash('sha256', $password);
 
-        $campi = $this->campiTabelleDB[$table];
+        $datoritab= $this->tabelleDB[2];
+    $richiedentitab= $this->tabelleDB[4];
+        $campi = $this->campiTabelleDB[$richiedentitab];
         $attivo = 1;
         /*  query: "SELECT matricola, nome, cognome, email, 'studente' as tabella FROM studente WHERE email = ? AND password = ? AND attivo = 1
                     UNION
@@ -86,9 +87,9 @@ class DBUtenti
             $campi[1] . ", " .
             $campi[2] . ", " .
             $campi[3] . ", " .
-            "'" . $table . "' as tabella " .
+            "'" . $richiedentitab . "' as tabella " .
             "FROM " .
-            $studenteTab . " " .
+            $richiedentitab . " " .
             "WHERE " .
             $campi[3] . " = ? AND " .
             $campi[4] . " = ? AND " .
@@ -99,9 +100,9 @@ class DBUtenti
             $campi[1] . ", " .
             $campi[2] . ", " .
             $campi[3] . ", " .
-            "'" . $docenteTab . "' as tabella " .
+            "'" . $datoritab . "' as tabella " .
             "FROM " .
-            $docenteTab . " " .
+            $datoritab . " " .
             "WHERE " .
             $campi[3] . " = ? AND " .
             $campi[4] . " = ? AND " .
@@ -115,13 +116,14 @@ class DBUtenti
         $stmt->execute();
         //Ricevo la risposta del DB
         $stmt->store_result();
+        echo($query." ". $password);
         if ($stmt->num_rows > 0) {
-            $stmt->bind_result($matricola, $nome, $cognome, $email, $table);
+            $stmt->bind_result($id, $nome, $cognome, $email, $table);
             $utente = array();
 
             while ($stmt->fetch()) {
                 $temp = array();
-                $temp[$campi[0]] = $matricola;
+                $temp[$campi[0]] = $id;
                 $temp[$campi[1]] = $nome;
                 $temp[$campi[2]] = $cognome;
                 $temp[$campi[3]] = $email;
@@ -287,7 +289,7 @@ class DBUtenti
         $tabella = $this->tabelleDB[$table];
         $campi = $this->campiTabelleDB[$tabella];
         $attivo = 0;
-
+echo($password);
             //query: "INSERT INTO TABLE(datore:2,richiedente:4) ( nome, cognome, email, password, attivo, contatto) VALUES (?,?,?,?,?,0,?)"
             $query = (
                 "INSERT INTO " .

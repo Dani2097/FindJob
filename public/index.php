@@ -84,11 +84,12 @@ $app->post('/login', function (Request $request, Response $response) {
     $email = $requestData['email'];
     $password = $requestData['password'];
 
+    $table=$requestData['table'];
     //Risposta del servizio REST
     $responseData = array(); //La risposta e' un array di informazioni da compilare
 
     //Controllo la risposta dal DB e compilo i campi della risposta
-    $utente = $db->login($email, $password);
+    $utente = $db->login($email, $password,$table);
     if ($utente) { //Se l'utente esiste ed e' corretta la password
         $responseData['error'] = false; //Campo errore = false
         $responseData['message'] = 'Accesso effettuato'; //Messaggio di esiso positivo
