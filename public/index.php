@@ -122,7 +122,7 @@ $app->post('/registrazione', function (Request $request, Response $response) {
 
 if ($responseDB ) { //Se la registrazione è andata a buon fine
         $responseData['error'] = false; //Campo errore = false
-        $responseData['message'] = 'Registrazione avvenuta con successo'.(String); //Messaggio di esito positivo
+        $responseData['message'] = 'Registrazione avvenuta con successo'; //Messaggio di esito positivo
         $emailSender = new EmailHelperAltervista();
         $link = 'http://unimolshare.altervista.org/logic/UnimolShare/public/activate.php?email=' . $email ;
         $emailSender->sendConfermaAccount($email, $link);
