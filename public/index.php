@@ -226,18 +226,18 @@ $app->post('/recupero', function (Request $request, Response $response) {
 
 // Run app = ho riempito $app e avvio il servizio REST
 
-$app->post('/visualizzadocumentistudenti', function (Request $request, Response $response) {
-
-    $db = new DBDatore();
-
+$app->post('/visualizzalavoriperid', function (Request $request, Response $response) {
+    $requestData = $request->getParsedBody()
+    $db = new DBRichiedente();
+    $id = $requestData['id'];
 //Controllo la risposta dal DB e compilo i campi della risposta ok
-    $responseData = $db->visualizzaDocumentistudenti();
+    $responseData = $db->visualizzaLavoroId($id);
     $contatore = (count($responseData));
     if ($responseData != null) {
         $responseData['error'] = false; //Campo errore = false
         $responseData['message'] = 'Elemento visualizzato con successo'; //Messaggio di esito positivo
         $responseData['contatore'] = $contatore;
-        $response->getBody()->write(json_encode(array("documenti" => $responseData)));
+        $response->getBody()->write(json_encode(array("lavori" => $responseData)));
         //Definisco il Content-type come json, i dati sono strutturati e lo dichiaro al browser
         $newResponse = $response->withHeader('Content-type', 'application/json');
         return $newResponse; //Invio la risposta del servizio REST al client

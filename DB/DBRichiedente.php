@@ -65,39 +65,43 @@ class DBRichiedente
         $this->connection = $db->runConnection();
     }
 
-    //Funzionante visualizza profilo docente (Michela)
-    public function visualizzaProfiloDocente($matricola)
+    //Funzionante visualizza lavoro per id (Errico)
+    public function visualizzaLavoroID($id)
     {
-        $tabella = $this->tabelleDB[2];
+        $tabella = $this->tabelleDB[3];
         $campi = $this->campiTabelleDB[$tabella];
         //query: "SELECT nome, cognome, email FROM docente WHERE matricola = ?"
         $query = (
             "SELECT " .
             $campi[1] . ", " .
             $campi[2] . ", " .
-            $campi[3] . " " .
+            $campi[3] . ", " .
+            $campi[4] . ", " .
+            $campi[5] . " " .
             "FROM " .
             $tabella .
             " WHERE " .
             $campi[0] . " = ? "
         );
         $stmt = $this->connection->prepare($query);
-        $stmt->bind_param("s", $matricola); //ss se sono 2 stringhe, ssi 2 string e un int (sostituisce ? della query)
+        $stmt->bind_param("i", $id);
         $stmt->execute();
         $stmt->store_result();
         if ($stmt->num_rows > 0) {
-            $stmt->bind_result($nome, $cognome, $email);
-            $profilo = array();
+            $stmt->bind_result($categoria, $nome, $datore, $descrizione, $link);
+            $lavori = array();
             while ($stmt->fetch()) { //Scansiono la risposta della query
                 $temp = array();
                 //Indicizzo con key i dati nell'array
-                $temp[$campi[1]] = $nome;
-                $temp[$campi[2]] = "$cognome";
-                $temp[$campi[3]] = $email;
+                $temp[$campi[1]] = $categoria;
+                $temp[$campi[2]] = $nome;
+                $temp[$campi[3]] = $datore;
+                $temp[$campi[4]] = $descrizione;
+                $temp[$campi[5]] = $link;
 
-                array_push($profilo, $temp); //Inserisco l'array $temp all'ultimo posto dell'array $profilo
+                array_push($lavori, $temp); //Inserisco l'array $temp all'ultimo posto dell'array $profilo
             }
-            return $profilo;
+            return $lavori;
         } else {
             return null;
         }
