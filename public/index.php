@@ -227,7 +227,7 @@ $app->post('/recupero', function (Request $request, Response $response) {
 // Run app = ho riempito $app e avvio il servizio REST
 
 $app->post('/visualizzalavoriperid', function (Request $request, Response $response) {
-    $requestData = $request->getParsedBody()
+    $requestData = $request->getParsedBody();
     $db = new DBRichiedente();
     $id = $requestData['id'];
 //Controllo la risposta dal DB e compilo i campi della risposta ok
