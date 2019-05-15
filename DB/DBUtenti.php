@@ -138,6 +138,37 @@ class DBUtenti
 
     }
 
+
+    //danilo per visualizzare il corso di studio
+    public function visualizzaCategoriaperID($id)
+    {
+
+        $table = $this->tabelleDB[0]; //Tabella per la query
+        $campi = $this->campiTabelleDB[$table];
+        $query = //query: "SELECT id, nome FROM cdl"
+            "SELECT " .
+            $campi[1]." ".
+
+            "FROM " .
+            $table." ".
+            "WHERE ". $campi[0]." = ?";
+        $stmt = $this->connection->prepare($query);
+        $stmt->bind_param(i , $id);
+        $stmt->execute();
+        $stmt->store_result();
+        if ($stmt->num_rows > 0) {
+            $stmt->bind_result($nome,$cognome,$email);
+
+            $CDL = array();
+            while ($stmt->fetch()) { //Scansiono la risposta della query
+                $temp = array(); //Array temporaneo per l'acquisizione dei dati
+                //Indicizzo con key i dati nell'array
+                $temp[$campi[1]] = $nome;
+                array_push($Categoria, $temp); //Inserisco l'array $temp all'ultimo posto dell'array $cdl
+            }
+            return $Categoria;
+        }else return null;
+    }
     //danilo per visualizzare il corso di studio
     public function visualizzaProfiloPerId($id,$tablenumber)
     {
@@ -230,7 +261,7 @@ class DBUtenti
     }
 
     // Funzione Modifica Profilo (Gigi)// da cambiare il ritotno ok
-    public function modificaProfilo($matricola, $nome, $cognome, $password, $tabella)
+    public function modificaProfilo($id, $nome, $cognome, $email,$password, $tabella)
     {
         $password = hash('sha256', $password);
         $campi = $this->campiTabelleDB[$tabella];
@@ -241,13 +272,14 @@ class DBUtenti
             "SET " .
             $campi[1] . " = ?, " .
             $campi[2] . " = ?, " .
+            $campi[3] . " = ?, " .
             $campi[4] . " = ? " .
             "WHERE " .
             $campi[0] . " = ?"
         );
         //Invio la query
         $stmt = $this->connection->prepare($query);
-        $stmt->bind_param("ssss", $nome, $cognome, $password, $matricola); //ss se sono 2 stringhe, ssi 2 string e un int (sostituisce ? della query)
+        $stmt->bind_param("ssssi", $nome, $cognome,$email, $password, $id); //ss se sono 2 stringhe, ssi 2 string e un int (sostituisce ? della query)
 
         $result = $stmt->execute();
 

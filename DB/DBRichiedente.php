@@ -64,6 +64,46 @@ class DBRichiedente
         $db = new DBConnectionManager();
         $this->connection = $db->runConnection();
     }
+    public function visualizzaLavoroperIdCategoria($idcategoria)
+    {
+        $tabella = $this->tabelleDB[3];
+        $campi = $this->campiTabelleDB[$tabella];
+        //query: "SELECT nome, cognome, email FROM docente WHERE matricola = ?"
+        $query = (
+            "SELECT " .
+            $campi[0] . ", " .
+            $campi[2] . ", " .
+            $campi[3] . ", " .
+            $campi[4] . ", " .
+            $campi[5] . " " .
+            "FROM " .
+            $tabella .
+            " WHERE " .
+            $campi[1] . " = ? "
+        );
+        $stmt = $this->connection->prepare($query);
+        $stmt->bind_param("i", $idcategoria);
+        $stmt->execute();
+        $stmt->store_result();
+        if ($stmt->num_rows > 0) {
+            $stmt->bind_result($id, $nome, $datore, $descrizione, $link);
+            $lavori = array();
+            while ($stmt->fetch()) { //Scansiono la risposta della query
+                $temp = array();
+                //Indicizzo con key i dati nell'array
+                $temp[$campi[0]] = $id;
+                $temp[$campi[2]] = $nome;
+                $temp[$campi[3]] = $datore;
+                $temp[$campi[4]] = $descrizione;
+                $temp[$campi[5]] = $link;
+
+                array_push($lavori, $temp); //Inserisco l'array $temp all'ultimo posto dell'array $profilo
+            }
+            return $lavori;
+        } else {
+            return null;
+        }
+    }
 
     //Funzionante visualizza lavoro per id (Errico)
     public function visualizzaLavoroID($id)
