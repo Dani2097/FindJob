@@ -9,7 +9,7 @@ class DBDatore
         "curriculum",//1
         "datore",//2
         "lavoro",//3
-        "richiedente"//4
+        "richiedente"//4dasdaas
     ];
     private $campiTabelleDB = [ //Campi delle tabelle (array bidimensionale indicizzato con key)
         "categoria" => [
